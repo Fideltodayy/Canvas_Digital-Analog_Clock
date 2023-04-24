@@ -1,0 +1,89 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+</head>
+<body onLoad='drawShape();'>
+ <canvas id="mycanvas" width="800" height="800"></canvas>
+<script type="text/javascript">
+var canvas = document.getElementById('mycanvas');
+var ctx = canvas.getContext('2d');
+const labels = ['3','4','5','6','7','8','9','10','11','12','1','2']
+
+function drawShape(){
+    ctx.translate(400,400);//Move the canvas to the center
+    animate();
+}
+
+// The animating function
+function animate(){
+    ctx.clearRect(-400,-400,800,800); // Clears the canvas to enable redrawing
+    var now = new Date();
+    var hours = now.getHours();
+    var minutes = now.getMinutes();
+    var seconds = now.getSeconds();
+
+    // Draw the clock face
+    ctx.beginPath();
+    ctx.arc(0, 0, 200, 0, 2 * Math.PI,false);
+    ctx.fillStyle = 'white';
+    ctx.fill();
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = 'black';
+    ctx.stroke();
+
+    // Draw the numbers
+    for(var i = 0; i < labels.length; i++){
+        var angle = i * Math.PI / 6;
+        var x = Math.cos(angle) * 160;
+        var y = Math.sin(angle) * 160;
+        ctx.fillStyle = "black";
+        ctx.font = "bold 30px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText(labels[i], x, y + 10);
+    }
+
+    // Draw the hour hand
+    ctx.beginPath();
+    var hourAngle = (hours % 12) * Math.PI / 6 + minutes * Math.PI / 360 + seconds * Math.PI / 21600;
+    var hourX = Math.cos(hourAngle) * 80;
+    var hourY = Math.sin(hourAngle) * 80;
+    ctx.moveTo(0, 0);
+    ctx.lineTo(hourX, hourY);
+    ctx.lineWidth = 8;
+    ctx.strokeStyle = 'black';
+    ctx.stroke();
+
+    // Draw the minute hand
+    ctx.beginPath();
+    var minuteAngle = minutes * Math.PI / 30 + seconds * Math.PI / 1800;
+    var minuteX = Math.cos(minuteAngle) * 120;
+    var minuteY = Math.sin(minuteAngle) * 120;
+    ctx.moveTo(0, 0);
+    ctx.lineTo(minuteX, minuteY);
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = 'black';
+    ctx.stroke();
+
+    // Draw the second hand
+    ctx.beginPath();
+    var secondAngle = seconds * Math.PI / 30;
+    var secondX = Math.cos(secondAngle) * 140;
+    var secondY = Math.sin(secondAngle) * 140;
+    ctx.moveTo(0, 0);
+    ctx.lineTo(secondX, secondY);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = 'red';
+    ctx.stroke();
+
+    ctx.beginPath();
+    var hourX = 0;
+    var hourY = -250;
+    ctx.fillStyle = 'black';
+    ctx.fillText(hours + ": " + minutes + ":" + seconds,hourX,hourY);
+
+    // Set the animation to be called after 1 second
+    setTimeout(animate, 1000);
+}
+</script>
+</body>
+</html>
